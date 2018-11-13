@@ -217,6 +217,45 @@ const Mutations = {
       },
       info
     );
+  },
+  async addToCart(parent, args, ctx, info) {
+    // 1 Check if it is sign i
+    const { userId } = ctx.request;
+    if (!userId) {
+      throw new Error("You must be logged in to add items");
+    }
+    // 2 Query the users current car
+    const [existingCartItem] = await ctx.db.query.cartItems({
+      where: {
+        user: { id: userId },
+        item: { id: args.id }
+      }
+    });
+    // 3 check if that item is already in their car and increment by 1 if it is
+    if (existingCartItem) {
+      console.log("this item exists");
+      return ctx.db.mutation.updateCartItem(
+        {
+          where: { id: existingCartItem.id },
+          data: { quantity: existingCartItem.quantity + 1 }
+        },
+        info
+      );
+    }
+    // 4 if it is not create a fresh new item for that user
+    return ctx.db.mutation.createCartItem(
+      {
+        data: {
+          user: {
+            connect: { id: userId }
+          },
+          item: {
+            connect: { id: args.id }
+          }
+        }
+      },
+      info
+    );
   }
 };
 
