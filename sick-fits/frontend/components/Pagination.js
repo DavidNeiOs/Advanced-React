@@ -21,7 +21,7 @@ const Pagination = props => (
     {({ data, error, loading }) => {
       if (loading) return <p>loading...</p>;
       const count = data.itemsConnection.aggregate.count;
-      const pages = Math.ceil(count / perPage);
+      const pages = Math.ceil(count / perPage) ? Math.ceil(count / perPage) : 1;
       const page = props.page;
       return (
         <PaginationStyles>
