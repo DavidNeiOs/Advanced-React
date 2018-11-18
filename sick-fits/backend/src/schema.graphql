@@ -16,7 +16,11 @@ type Mutation {
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
   requestReset(email: String!): SuccessMessage
-  resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
+  resetPassword(
+    resetToken: String!
+    password: String!
+    confirmPassword: String!
+  ): User!
   updatePermissions(permissions: [Permission], userId: ID!): User
   addToCart(id: ID!): CartItem
   removeFromCart(id: ID!): CartItem
@@ -24,13 +28,18 @@ type Mutation {
 }
 
 type Query {
-  items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, first: Int): [Item]!
+  items(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    first: Int
+  ): [Item]!
   item(where: ItemWhereUniqueInput!): Item
   itemsConnection(where: ItemWhereInput): ItemConnection!
   me: User
   users: [User]!
   order(id: ID!): Order
-  orders(where: ItemWhereInput): [Order]!
+  orders(orderBy: OrderOrderByInput): [Order]!
 }
 
 type User {
@@ -40,4 +49,3 @@ type User {
   permissions: [Permission]
   cart: [CartItem!]!
 }
-

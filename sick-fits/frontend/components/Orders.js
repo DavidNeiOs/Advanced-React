@@ -10,8 +10,8 @@ import User from "./User";
 import styled from "styled-components";
 
 const ALL_ORDERS_QUERY = gql`
-  query ALL_ORDERS_QUERY($id: ID!) {
-    orders(where: { id: $id }) {
+  query ALL_ORDERS_QUERY {
+    orders(orderBy: createdAt_DESC) {
       id
       total
       charge
@@ -46,59 +46,51 @@ const OrderPreview = styled.div`
 class Orders extends Component {
   render() {
     return (
-      <User>
-        {({ data, loading, error }) => {
+      <Query query={ALL_ORDERS_QUERY}>
+        {({ data: { orders }, error, loading }) => {
           if (error) return <Error error={error} />;
           if (loading) return <p>LOADING...</p>;
+          console.log(orders);
           return (
-            <Query query={ALL_ORDERS_QUERY} variables={{ id: data.me.id }}>
-              {({ data: { orders }, error, loading }) => {
-                if (error) return <Error error={error} />;
-                if (loading) return <p>LOADING...</p>;
-                console.log(orders);
-                return (
-                  <div>
-                    <Head>
-                      <title>Sick fits | All Orders</title>
-                    </Head>
-                    {orders.map(order => (
-                      <OrderPreview key={order.id}>
-                        <p>
-                          <span>Items: </span>
-                          {order.items.map((item, index) => (
-                            <span key={index}>
-                              {item.title}
-                              {index === order.items.length - 1 ? "." : ","}
-                            </span>
-                          ))}
-                        </p>
-                        <p>
-                          <span>Date: </span>
-                          <span>
-                            {format(order.createdAt, "MMMM d, YYYY h:mm a")}
-                          </span>
-                        </p>
-                        <p>
-                          <span>Total price: </span>
-                          <span>{formatMoney(order.total)}</span>
-                        </p>
-                        <Link
-                          href={{
-                            pathname: "/order",
-                            query: { id: order.id }
-                          }}
-                        >
-                          <a>Go to Order</a>
-                        </Link>
-                      </OrderPreview>
+            <div>
+              <Head>
+                <title>Sick fits | All Orders</title>
+              </Head>
+              {orders.map(order => (
+                <OrderPreview key={order.id}>
+                  <p>
+                    <span>Items: </span>
+                    {order.items.map((item, index) => (
+                      <span key={index}>
+                        {item.title}
+                        {index === order.items.length - 1 ? "." : ","}
+                      </span>
                     ))}
-                  </div>
-                );
-              }}
-            </Query>
+                  </p>
+                  <p>
+                    <span>Date: </span>
+                    <span>
+                      {format(order.createdAt, "MMMM d, YYYY h:mm a")}
+                    </span>
+                  </p>
+                  <p>
+                    <span>Total price: </span>
+                    <span>{formatMoney(order.total)}</span>
+                  </p>
+                  <Link
+                    href={{
+                      pathname: "/order",
+                      query: { id: order.id }
+                    }}
+                  >
+                    <a>Go to Order</a>
+                  </Link>
+                </OrderPreview>
+              ))}
+            </div>
           );
         }}
-      </User>
+      </Query>
     );
   }
 }
