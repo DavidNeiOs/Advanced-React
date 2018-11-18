@@ -45,6 +45,19 @@ const Query = {
       throw new Error("You have no permission fellow");
     // 4. Return the order
     return order;
+  },
+  async orders(parent, args, ctx, info) {
+    // 1. check if user is logged in
+    if (!ctx.request.userId) {
+      throw new Error("You must be logged in to see your orders");
+    }
+    // 2. query ordes for this user
+    return ctx.db.query.orders(
+      {
+        where: { id: args.id }
+      },
+      info
+    );
   }
   // async items(parent, args, ctx, info) {
   //   console.log("getting items");
