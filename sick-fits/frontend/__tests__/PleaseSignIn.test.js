@@ -7,7 +7,7 @@ import { fakeUser } from "../lib/testUtils";
 
 const notSignedInMocks = [
   {
-    request: { qurery: CURRENT_USER_QUERY },
+    request: { query: CURRENT_USER_QUERY },
     result: { data: { me: null } }
   }
 ];

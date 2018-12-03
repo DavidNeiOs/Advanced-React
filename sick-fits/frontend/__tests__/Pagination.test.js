@@ -4,6 +4,7 @@ import Pagination, { PAGINATION_QUERY } from "../components/Pagination";
 import Router from "next/router";
 import toJSON, { toJson } from "enzyme-to-json";
 import { MockedProvider } from "react-apollo/test-utils";
+
 Router.router = {
   push() {},
   prefetch() {}

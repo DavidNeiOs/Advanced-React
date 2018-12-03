@@ -146,3 +146,4 @@ class User extends React.Component {
 }
 
 export default Permissions;
+export { ALL_USERS_QUERY };
